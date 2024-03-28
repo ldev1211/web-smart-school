@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import WebColors from "../../assets/colors";
 
 import { MDBContainer, MDBRow, MDBCol, MDBInput } from "mdb-react-ui-kit";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +59,10 @@ function LoginPage() {
                         position: "bottom-right",
                         autoClose: 2000,
                       });
+                      localStorage.setItem(
+                        "user",
+                        JSON.stringify(response.data["data"])
+                      );
                       navigate("/home", { replace: true });
                     } else {
                       toast.error("Đăng nhập thất bại.", {
@@ -71,7 +76,7 @@ function LoginPage() {
                   });
               }}
               style={{
-                backgroundColor: "#DE2219",
+                backgroundColor: WebColors.colorMain,
                 color: "white",
                 fontSize: "22px",
                 borderRadius: "8px",

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 function SplashPage() {
   const navigate = useNavigate();
-  const usernameLogged = localStorage.getItem("username");
+  const usernameLogged = localStorage.getItem("user");
   useEffect(() => {
     if (usernameLogged != null) {
       navigate("/home", { replace: true });
