@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
-
 import WebSideBar from "../../components/sidebar/SideBar";
-import WebTable from "../../components/table/Table";
+import WebTableUnConfirm from "../../components/table/TableUnConfirm";
 
-function HomePage() {
+function ConfirmPage() {
   return (
     <div>
       <div
@@ -12,14 +10,14 @@ function HomePage() {
           width: "20%",
         }}
       >
-        {WebSideBar(0)}
+        {WebSideBar(1)}
       </div>
       <div style={{ display: "inline-grid", width: "80%" }}>
-        <h1>Danh sách điểm danh</h1>
-        <WebTable />
+        <h1>Danh sách điểm danh chưa được xác nhận</h1>
+        <WebTableUnConfirm />
       </div>
     </div>
   );
 }
 
-export default HomePage;
+export default ConfirmPage;

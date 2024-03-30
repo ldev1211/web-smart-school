@@ -2,14 +2,13 @@ import { useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import WebColors from "../../assets/colors";
-function WebSideBar() {
+function WebSideBar(indexSelect: number) {
   const userRaw = localStorage.getItem("user") ?? "{}";
   const user = JSON.parse(userRaw);
   const fullName = user["user"]["fullName"];
-  const [indexSelect, setIndexSelect] = useState(0);
   const menus = [
     { label: "Danh sách điểm danh", to: "/home" },
-    { label: "Xác nhận điểm danh", to: "/home" },
+    { label: "Xác nhận điểm danh", to: "/confirm" },
   ];
   return (
     <div style={{ display: "flex", height: "100vh" }}>
@@ -29,9 +28,7 @@ function WebSideBar() {
                 color: index == indexSelect ? "white" : "black",
               }}
               component={<Link to={item.to} />}
-              onClick={() => {
-                setIndexSelect(index);
-              }}
+              onClick={() => {}}
             >
               {item.label}
             </MenuItem>

@@ -9,6 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 function createData(
   id: string,
   name: string,
@@ -27,12 +29,13 @@ var rows: {
   time: string;
   room: string;
 }[] = [];
-function WebTable() {
+function WebTableUnConfirm() {
   const [isLoading, setLoading] = useState(true);
-  useEffect(() => {
-    const userRaw = localStorage.getItem("user") ?? "{}";
-    const user = JSON.parse(userRaw);
-    const accessToken = user["accessToken"];
+  const userRaw = localStorage.getItem("user") ?? "{}";
+  const user = JSON.parse(userRaw);
+  const accessToken = user["accessToken"];
+  const navigate = useNavigate();
+  var fetchData = function () {
     axios({
       url: "http://localhost:3000/teacher/attendance/get_attendance",
       method: "GET",
@@ -45,7 +48,7 @@ function WebTable() {
         const attendances = response.data["data"];
         for (let i = 0; i < attendances.length; ++i) {
           const attendance = attendances[i];
-          if (attendance.isConfirmed === 1) {
+          if (attendance.isConfirmed === 0) {
             rows.push(
               createData(
                 attendance.idAttendance,
@@ -61,6 +64,10 @@ function WebTable() {
         setLoading(false);
       }
     });
+  };
+
+  useEffect(() => {
+    fetchData();
   });
   console.log(rows);
   return (
@@ -73,6 +80,7 @@ function WebTable() {
             <TableCell align="center">Ngày</TableCell>
             <TableCell align="center">Giờ học</TableCell>
             <TableCell align="center">Phòng</TableCell>
+            <TableCell align="center"></TableCell>
             <TableCell align="center"></TableCell>
           </TableRow>
         </TableHead>
@@ -97,11 +105,73 @@ function WebTable() {
                     type="button"
                     value="Xem danh sách"
                     style={{
+                      backgroundColor: "#0D1282",
+                      borderRadius: "8px",
+                      color: "white",
+                      border: "none",
+                      padding: "8px 8px",
+                    }}
+                    onClick={() => {
+                      axios({
+                        method: "GET",
+                        headers: {
+                          authorization: "Bearer " + accessToken,
+                        },
+                        url:
+                          "http://localhost:3000/teacher/attendance/get_detail_attendance/" +
+                          row.id,
+                      }).then((response) => {
+                        if (!response.data["error"]) {
+                          console.log(response.data["data"]);
+                          navigate("/student", {
+                            state: {
+                              students: response.data["data"],
+                            },
+                          });
+                        } else {
+                          toast.error("Xác nhận danh sách thất bại.", {
+                            position: "bottom-right",
+                            autoClose: 2000,
+                          });
+                        }
+                      });
+                    }}
+                  />
+                </TableCell>
+                <TableCell align="center">
+                  <input
+                    type="button"
+                    value="Xác nhận điểm danh"
+                    style={{
                       backgroundColor: WebColors.colorMain,
                       borderRadius: "8px",
                       color: "white",
                       border: "none",
                       padding: "8px 8px",
+                    }}
+                    onClick={() => {
+                      axios({
+                        method: "POST",
+                        headers: {
+                          authorization: "Bearer " + accessToken,
+                        },
+                        url:
+                          "http://localhost:3000/teacher/attendance/confirm_attendance/" +
+                          row.id,
+                      }).then((response) => {
+                        if (!response.data["error"]) {
+                          toast.success("Xác nhận danh sách thành công.", {
+                            position: "bottom-right",
+                            autoClose: 2000,
+                          });
+                          fetchData();
+                        } else {
+                          toast.error("Xác nhận danh sách thất bại.", {
+                            position: "bottom-right",
+                            autoClose: 2000,
+                          });
+                        }
+                      });
                     }}
                   />
                 </TableCell>
@@ -110,7 +180,8 @@ function WebTable() {
           </TableBody>
         )}
       </Table>
+      <ToastContainer />
     </TableContainer>
   );
 }
-export default WebTable;
+export default WebTableUnConfirm;
