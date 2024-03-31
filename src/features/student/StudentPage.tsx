@@ -1,15 +1,15 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import WebTableStudent from "../../components/table/TableStudent";
 
 function StudentPage() {
   const location = useLocation();
-
+  const navigate = useNavigate();
   let students = location.state.students;
   return (
     <div style={{ padding: "24px" }}>
       <div
         onClick={() => {
-          console.log("DWQQWD");
+          navigate(-1);
         }}
         style={{
           display: "inline-block",

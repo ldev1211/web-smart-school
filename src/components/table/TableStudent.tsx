@@ -36,6 +36,7 @@ function WebTableStudent(
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
+            <TableCell>STT</TableCell>
             <TableCell>Mã sinh viên</TableCell>
             <TableCell>Họ và tên</TableCell>
             <TableCell>Lớp</TableCell>
@@ -44,11 +45,14 @@ function WebTableStudent(
           </TableRow>
         </TableHead>
         <TableBody>
-          {students!.map((student) => (
+          {students!.map((student, index) => (
             <TableRow
               key={student.id + student.fullName}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
+              <TableCell component="th" scope="row">
+                {index + 1}
+              </TableCell>
               <TableCell component="th" scope="row">
                 {student.id}
               </TableCell>
