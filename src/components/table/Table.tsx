@@ -9,26 +9,34 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import CircularProgress from "@mui/material/CircularProgress/CircularProgress";
 import { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 function createData(
   id: string,
   name: string,
   day: string,
+  img: string,
   date: string,
   time: string,
   room: string
 ) {
-  return { id, name, day, date, time, room };
+  return { id, name, day, img, date, time, room };
 }
 var rows: {
   id: string;
   name: string;
   day: string;
+  img: string;
   date: string;
   time: string;
   room: string;
 }[] = [];
 function WebTable() {
   const [isLoading, setLoading] = useState(true);
+  const userRaw = localStorage.getItem("user") ?? "{}";
+  const user = JSON.parse(userRaw);
+  const accessToken = user["accessToken"];
+  const navigate = useNavigate();
   useEffect(() => {
     const userRaw = localStorage.getItem("user") ?? "{}";
     const user = JSON.parse(userRaw);
@@ -51,6 +59,7 @@ function WebTable() {
                 attendance.idAttendance,
                 attendance.subjectName,
                 attendance.day,
+                attendance.img,
                 attendance.date,
                 attendance.timeLearn,
                 attendance.room
@@ -102,6 +111,31 @@ function WebTable() {
                       color: "white",
                       border: "none",
                       padding: "8px 8px",
+                    }}
+                    onClick={() => {
+                      axios({
+                        method: "GET",
+                        headers: {
+                          authorization: "Bearer " + accessToken,
+                        },
+                        url:
+                          "http://localhost:3000/teacher/attendance/get_detail_attendance/" +
+                          row.id,
+                      }).then((response) => {
+                        if (!response.data["error"]) {
+                          console.log(response.data["data"]);
+                          navigate("/student", {
+                            state: {
+                              students: response.data["data"],
+                            },
+                          });
+                        } else {
+                          toast.error("Xác nhận danh sách thất bại.", {
+                            position: "bottom-right",
+                            autoClose: 2000,
+                          });
+                        }
+                      });
                     }}
                   />
                 </TableCell>

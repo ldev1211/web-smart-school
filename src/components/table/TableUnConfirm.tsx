@@ -15,11 +15,12 @@ function createData(
   id: string,
   name: string,
   day: string,
+  img: string,
   date: string,
   time: string,
   room: string
 ) {
-  return { id, name, day, date, time, room };
+  return { id, name, day, img, date, time, room };
 }
 var rows: {
   id: string;
@@ -54,6 +55,7 @@ function WebTableUnConfirm() {
                 attendance.idAttendance,
                 attendance.subjectName,
                 attendance.day,
+                attendance.img,
                 attendance.date,
                 attendance.timeLearn,
                 attendance.room
@@ -69,7 +71,6 @@ function WebTableUnConfirm() {
   useEffect(() => {
     fetchData();
   });
-  console.log(rows);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -164,6 +165,7 @@ function WebTableUnConfirm() {
                             position: "bottom-right",
                             autoClose: 2000,
                           });
+                          setLoading(true);
                           fetchData();
                         } else {
                           toast.error("Xác nhận danh sách thất bại.", {

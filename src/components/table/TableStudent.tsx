@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useEffect } from "react";
+import WebColors from "../../assets/colors";
 
 var student: {
   id: string;
@@ -24,6 +25,7 @@ function WebTableStudent(
   students: {
     id: string;
     password: string;
+    img: string;
     fullName: string;
     birthDay: string;
     gioiTinh: number;
@@ -34,14 +36,15 @@ function WebTableStudent(
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+        <TableHead style={{ backgroundColor: WebColors.colorMain }}>
           <TableRow>
-            <TableCell>STT</TableCell>
-            <TableCell>Mã sinh viên</TableCell>
-            <TableCell>Họ và tên</TableCell>
-            <TableCell>Lớp</TableCell>
-            <TableCell>Ngày sinh</TableCell>
-            <TableCell>Giới tính</TableCell>
+            <TableCell style={{ color: "white" }}>STT</TableCell>
+            <TableCell style={{ color: "white" }}>Mã sinh viên</TableCell>
+            <TableCell style={{ color: "white" }}>Họ và tên</TableCell>
+            <TableCell style={{ color: "white" }}>Lớp</TableCell>
+            <TableCell style={{ color: "white" }}>Ngày sinh</TableCell>
+            <TableCell style={{ color: "white" }}>Giới tính</TableCell>
+            <TableCell style={{ color: "white" }}>Ảnh điểm danh</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -60,6 +63,14 @@ function WebTableStudent(
               <TableCell>{student.class}</TableCell>
               <TableCell>{student.birthDay}</TableCell>
               <TableCell>{student.gioiTinh === 0 ? "Nam" : "Nữ"}</TableCell>
+              <img
+                src={student.img}
+                alt="new"
+                style={{
+                  width: "200px",
+                  height: "200px",
+                }}
+              />
             </TableRow>
           ))}
         </TableBody>
